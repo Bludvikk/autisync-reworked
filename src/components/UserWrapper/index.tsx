@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
 
+import { Analytics } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import CircleIcon from '@mui/icons-material/Circle';
 import FormIcon from '@mui/icons-material/FormatListNumberedRtl';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -135,24 +135,6 @@ export default function TemporaryDrawer({
       </List>
       <Divider />
       <List>
-        {[
-          { label: 'About Us', Icon: CircleIcon, link: '/legacy/home2' },
-          {
-            label: 'Contact Us',
-            Icon: CircleIcon,
-            link: '/legacy/home2',
-          },
-          { label: 'Journey', Icon: CircleIcon, link: '/legacy/home2' },
-        ].map(({ label, Icon, link }) => (
-          <ListItem onClick={() => navigate(link)} button key={label}>
-            <ListItemIcon>
-              <Icon />
-            </ListItemIcon>
-            <ListItemText primary={label} />
-          </ListItem>
-        ))}
-
-        <Divider />
         {userInfo &&
           userInfo.roles.includes(ROLES.ADMIN) &&
           [
@@ -220,6 +202,12 @@ export default function TemporaryDrawer({
                     >
                       <h1 className='mx-5 my-5'>Hello {userInfo?.firstName}</h1>
                       <Divider />
+                      <MenuItem onClick={() => navigate('/legacy/profile')}>
+                        <ListItemIcon>
+                          <Analytics />
+                        </ListItemIcon>
+                        <ListItemText primary='Milestones' />
+                      </MenuItem>
                       <MenuItem onClick={() => navigate('/legacy/badges-page')}>
                         <ListItemIcon>
                           <BadgeIcon />

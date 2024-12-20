@@ -22,6 +22,7 @@ import {
   LegacySignUp,
   LegcyLogin,
 } from '~/pages/Legacy';
+import Profile from '~/pages/Legacy/Profile';
 import { IPage } from '~/types';
 
 export const Pages: IPage[] = [
@@ -135,6 +136,12 @@ export const Pages: IPage[] = [
   {
     path: '/legacy/home2',
     Component: Home2,
+    requireAuth: true,
+    requireAdmin: false,
+  },
+  {
+    path: '/legacy/profile',
+    Component: Profile,
     requireAuth: true,
     requireAdmin: false,
   },

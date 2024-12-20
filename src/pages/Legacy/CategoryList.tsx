@@ -88,6 +88,9 @@ const CategoryList = () => {
   return (
     <>
       <UserWrapper />
+      <div className='absolute left-0 z-10'>
+        <img src={'/assets/images/puzzleleft.png'} />
+      </div>
       {/* Join now Modal*/}
       {Join && (
         <div className='join-overlay' onClick={closeJoin}>
@@ -174,6 +177,9 @@ const CategoryList = () => {
               onClick={() => navigate(link)}
             />
           ))}
+        </div>
+        <div className='absolute right-0 -bottom-12 z-10'>
+          <img src={'/assets/images/puzzleright.png'} />
         </div>
       </div>
     </>

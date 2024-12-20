@@ -1,21 +1,13 @@
+import { useEffect, useRef } from 'react';
 import '../../styles/home2.css';
-import { useState } from 'react';
 
+import { ArrowDownward } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 import { UserWrapper } from '~/components';
-
+import Carousel from '~/components/Carousel';
 const Home2 = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
   const navigate = useNavigate();
-
-  const BadgesClick = () => {
-    navigate('legacy/badges-empty');
-  };
 
   const items = [
     {
@@ -78,72 +70,90 @@ const Home2 = () => {
         'Designed for more advanced learners when ready. The flashcards challenge students to engage with more intricate ideas and scenarios, helping to further develop their identification and cognitive skills.',
     },
   ];
-  // const LogoClick = () => {
-  //   navigate('/');
-  // };
 
+  const imageUrls: string[] = [
+    '/assets/images/car1.png',
+    '/assets/images/car2.png',
+    '/assets/images/car3.png',
+    '/assets/images/car4.png',
+    '/assets/images/car5.png',
+  ];
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch((error) => {
+        console.error('Error attempting to play', error);
+      });
+    }
+  }, []);
   return (
     <>
       <UserWrapper />
-
-      {/* Modal */}
-      {isModalOpen && (
-        // TODO: Sign out functionality
-        <div className='modal-overlay' onClick={closeModal}>
-          <div className='modal-content' onClick={(e) => e.stopPropagation()}>
-            <h2>Hello!</h2>
-            <p>JHAUNN</p>
-            <button onClick={BadgesClick} className='badges'>
-              Badges
-            </button>
-            <button className='logout'>Logout</button>
-          </div>
-        </div>
-      )}
-      {/* Banner */}
       <div className='flex space-y-4 flex-col relative items-center justify-center'>
-        <img
+        {/* <img
           className='w-[1600px] h-[450px] mx-20'
-          src='/assets/images/banner.png'
-        ></img>
+          src='/assets/images/autisync-banner.mp4'
+        ></img> */}
+        <div>
+          <video
+            style={{
+              borderRadius: '24px',
+              maxWidth: '100%',
+              width: '1200px',
+              margin: '0 auto',
+            }}
+            playsInline
+            loop
+            muted
+            controls
+            src='/assets/images/autisync-banner.mp4'
+            ref={videoRef}
+          />
+        </div>
         <button
           onClick={() => navigate('/quiz/category')}
-          className='text-[#FFE381] text-4xl z-10 right-[7%] -bottom-5 absolute rounded-3xl bg-[#375A63] w-80 h-28'
+          className='text-[#FFE381] text-4xl font-semibold z-10 rounded-3xl backdrop-blur-md bg-blue-200/30 p-4 absolute bottom-[20%] hover:scale-110 transition-all duration-300 '
         >
           Start Journey
         </button>
+        <div className='absolute bottom-1 items-center flex flex-col justify-center'>
+          <h1 className=' text-white'>scroll down to learn more</h1>
+          <ArrowDownward className='text-white animate-pulse transition-all duration-500' />
+        </div>
       </div>
 
       {/* Section 1 */}
-      <div className='flex flex-col items-start mx-40 mt-20'>
-        <h1 className='text-4xl underline'>About Us</h1>
-        <div className='pl-4 pt-4 flex flex-col sm:flex-col md:flex-col lg:flex-row items-center justify-center gap-8'>
-          <p>
-            At Educational Website Name, we are committed to providing a
-            supportive and inclusive learning environment for individuals with
-            autism. We understand the challenges that individuals on the autism
-            spectrum may face, such as difficulties with focus and managing
-            distractions. That is why we are dedicated to creating a
-            user-friendly, visually appealing website that not only caters to
-            their unique needs but also sparks interest and engagement. Our team
-            of passionate educators, therapists, and professionals collaborates
-            to develop content that is not only accessible but also captivating,
-            ensuring that individuals with autism can stay engaged and motivated
-            throughout their learning journey.
-            <br></br>
-            <br></br>
-            Our website design is carefully crafted to minimize overwhelming
-            stimuli and distractions while maximizing accessibility and ease of
-            navigation. Through clear layouts, intuitive interfaces, and
-            engaging visuals, we strive to create an environment where
-            individuals with autism can focus on learning without unnecessary
-            barriers. By combining evidence-based practices with innovative
-            technology, we aim to provide a seamless learning experience that
-            fosters independence, confidence, and a love for learning. Join us
-            in our mission to empower individuals with autism to unlock their
-            full potential and thrive in both academic and personal pursuits.
-          </p>
-
+      <div className='flex flex-col items-center justify-center pt-10'>
+        <img
+          src='/assets/images/banner-white.png'
+          className='w-[820px] h-auto'
+        />
+        <Carousel items={imageUrls} />
+        <hr className='w-[1200px] h-1 mx-auto my-4 bg-[#F7AF5A] border-0 rounded md:my-10'></hr>
+      </div>
+      <div className='absolute right-0 z-10'>
+        <img src={'/assets/images/puzzleright.png'} />
+      </div>
+      <div className='flex flex-col items-start justify-center p-10 rounded-r-2xl shadow-md mx-20 bg-[#F9EFCA]'>
+        <div className='pl-4 flex flex-col  sm:flex-col md:flex-col lg:flex-row gap-8'>
+          <div>
+            <div className='my-10 flex items-start flex-col justify-start'>
+              <h1 className='text-4xl'>What is Autisync?</h1>
+              <hr className='w-[320px] mt-1 h-1 bg-[#F7AF5A] border-0 rounded'></hr>
+            </div>
+            <p className='text-2xl font-light'>
+              At AUTISYNC, we create inclusive, user-friendly learning
+              experiences tailored for individuals with autism. Our thoughtfully
+              designed platform reduces distractions, offers clear navigation,
+              and features engaging visuals to support focus and learning.
+              Backed by educators and therapists, we combine evidence-based
+              practices with innovative design to foster confidence,
+              independence, and a love for learning. Join us in empowering
+              individuals with autism to reach their full potential!
+            </p>
+          </div>
           <img
             className='w-[640px] h-auto'
             src='/assets/images/img1.png'
@@ -151,8 +161,18 @@ const Home2 = () => {
           />
         </div>
       </div>
-      <div className='items-center flex flex-col justify-center'>
+      <div className='flex flex-row items-end justify-center'>
+        <img className='w-40' src='/assets/images/r1.png' />
+        <h1 className='text-5xl mb-6 text-[#375A63]'> About the Activities</h1>
+        <img className='w-40' src='/assets/images/r2.png' />
+      </div>
+      <hr className='w-[1200px] h-1 mx-auto my-2 bg-[#F7AF5A] border-0 rounded md:my-10'></hr>
+      <div className='absolute left-0 z-10'>
+        <img src={'/assets/images/puzzleleft.png'} />
+      </div>
+      <div className='items-center flex flex-col justify-center relative'>
         {/* Lesson Types */}
+
         <div className='py-20 text-4xl underline'>Categories</div>
         <div className='items-center flex flex-row'>
           {items.length > 1 &&
@@ -189,7 +209,7 @@ const Home2 = () => {
       </div>
       <div className='items-center flex flex-col justify-center'>
         {/* Lesson Types */}
-        <div className='py-10 text-4xl underline'>Difficulties</div>
+        <div className='py-10 text-4xl'>Difficulties</div>
         <div className='items-center flex flex-row'>
           {difficulties.length > 1 &&
             difficulties.map((item) => (
@@ -197,12 +217,17 @@ const Home2 = () => {
                 key={item.id}
                 className='flex flex-col gap-y-10 items-center justify-center w-[420px] mx-10'
               >
-                <h1 className='w-[200px] text-center text-4xl bg-[#F9EFCA] p-4 rounded-lg object-center h-auto'>
+                <h1 className='w-[320px] text-center text-5xl bg-[#F9EFCA] border-[1px] border-black p-6 rounded-lg object-center h-auto'>
                   {item.type}
                 </h1>
-                <p className='w-[400px] h-[400px]'>{item.description}</p>
+                <p className='w-[400px] h-[400px] text-medium px-10 text-center'>
+                  {item.description}
+                </p>
               </div>
             ))}
+        </div>
+        <div className='absolute left-0 z-10'>
+          <img src={'/assets/images/puzzleleft.png'} />
         </div>
       </div>
     </>

@@ -130,24 +130,48 @@ const FinishedActivity: FC<{
         if (badgesEarnedFromActivity.length > 0) {
           setUpdatedBadges(badgesEarnedFromActivity);
           setShowBadgePopup(true);
+        } else {
+          // If no new badges, navigate to home
+          navigate('/legacy/home2');
         }
 
         // Update user document with new badges and progress
+        const existingProgress = existingUserData.data()?.progress || [];
+        const updatedProgress = existingProgress.map((progressItem: any) => {
+          if (progressItem.activityId === room.activity) {
+            return {
+              ...progressItem,
+              score: score,
+              total: totalItems,
+              date: new Date().toISOString(),
+              time: format(new Date(), 'p, MMM dd'),
+              room: room.id,
+            };
+          }
+          return progressItem;
+        });
+
+        // Add new progress if it doesn't exist
+        if (
+          !updatedProgress.some(
+            (item: any) => item.activityId === room.activity
+          )
+        ) {
+          updatedProgress.push({
+            activityId: room.activity,
+            score: score,
+            total: totalItems,
+            date: new Date().toISOString(),
+            time: format(new Date(), 'p, MMM dd'),
+            room: room.id,
+          });
+        }
+
         await SetDocument<IUser>({
           docRef,
           data: {
             ...existingUserData.data(),
-            progress: [
-              ...(existingUserData.data()?.progress || []),
-              {
-                activityId: room.activity,
-                score: score,
-                total: totalItems,
-                date: new Date().toISOString(),
-                time: format(new Date(), 'p, MMM dd'),
-                room: room.id,
-              },
-            ],
+            progress: updatedProgress,
             badges: [
               ...(existingUserData.data()?.badges || []),
               ...badgesEarnedFromActivity,
@@ -155,14 +179,14 @@ const FinishedActivity: FC<{
           },
         });
       }
-
-      setTimeout(() => {
-        navigate('/legacy/home2');
-      }, 3000);
     } catch (err) {
       console.error(err);
       showError("Couldn't finish activity. Please try again later.");
     }
+  };
+
+  const handleContinue = () => {
+    navigate('/legacy/home2');
   };
 
   return (
@@ -214,20 +238,29 @@ const FinishedActivity: FC<{
                 borderRadius: '15px',
               }}
             >
-              <Typography variant='h4'>
-                Congratulations! You Earned New Badges!
-              </Typography>
-              <ul>
-                {updatedBadges.map((badge, index) => (
-                  <div
-                    key={index}
-                    className='flex flex-col items-center justify-center'
-                  >
-                    <img src={badge.imageLink} />
-                    <li key={index}>{badge.description}</li>
-                  </div>
-                ))}
-              </ul>
+              <div className='flex flex-col items-center justify-center'>
+                <Typography variant='h4'>Congratulations!</Typography>
+                <Typography variant='h4'>You earned a new badge!</Typography>
+                <ul>
+                  {updatedBadges.map((badge, index) => (
+                    <div
+                      key={index}
+                      className='flex flex-col items-center justify-center'
+                    >
+                      <img src={badge.imageLink} />
+                      <li key={index}>{badge.description}</li>
+                    </div>
+                  ))}
+                </ul>
+              </div>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={handleContinue}
+                sx={{ marginTop: '1rem' }}
+              >
+                Continue
+              </Button>
             </Paper>
           </Box>
         </div>
